@@ -10,6 +10,17 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Desktop\BackUp for 1401\game.c" />
+    <ClCompile Include="..\..\..\..\..\Desktop\BackUp for 1401\main.c" />
+    <ClCompile Include="..\..\..\..\..\Desktop\BackUp for 1401\mainmenu.c" />
+    <ClCompile Include="..\..\..\..\..\Desktop\BackUp for 1401\utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Desktop\BackUp for 1401\game.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\BackUp for 1401\mainmenu.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\BackUp for 1401\utils.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
