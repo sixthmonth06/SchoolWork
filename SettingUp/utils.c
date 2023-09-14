@@ -12,7 +12,6 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 			return 1;
 		}
 	} 
-	wdadwwadawd
 	return 0;
 }
 
