@@ -17,4 +17,12 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 
 int IsCircleClicked(float circle_center_x, float circle_center_y, float diameter, float click_x, float click_y)
 {
+	float x = click_x - circle_center_x;
+	float y = click_y - circle_center_y;
+	float distance = x * x + y * y; //not using square root, use square of distance to compare instead
+	if (distance <= diameter * diameter) {
+		return 1;
+	}
+	return 0;
+
 }
