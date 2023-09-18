@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "game.h"
 
-CP_Font font;
+
 CP_Color redColor;
 CP_Color fontColor;
 float width;
@@ -34,7 +34,7 @@ void Main_Menu_Exit(void)
 }
 
 void Setting_Font(void) {
-	font = CP_Font_Load("Assets/Exo2-Regular.ttf");
+	CP_Font font = CP_Font_Load("Assets/Exo2-Regular.ttf");
 	CP_Font_Set(font);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Settings_TextSize(50.f);
@@ -75,8 +75,6 @@ void Exit_Button(void) {
 		int clicked = IsAreaClicked(position_x, position_y, rect_width, rect_height, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		if (clicked == 1) {
 			CP_Engine_Terminate();
-			int i = 1;
-			
 		}  
 	}      
 }
