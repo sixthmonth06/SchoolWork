@@ -1,6 +1,7 @@
 #include "cprocessing.h"
 #include "mainmenu.h"
 #include "utils.h"
+#include "game.h"
 
 CP_Font font;
 CP_Color redColor;
@@ -53,7 +54,7 @@ void Play_Button(void) {
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_LEFT)) {
 		int clicked = IsAreaClicked(position_x, position_y, rect_width, rect_height, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 			if (clicked == 1) {
-				CP_Engine_Terminate();
+				CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
 		}
 
 	}
