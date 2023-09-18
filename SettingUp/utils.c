@@ -20,9 +20,10 @@ int IsCircleClicked(float circle_center_x, float circle_center_y, float diameter
 	float x = click_x - circle_center_x;
 	float y = click_y - circle_center_y;
 	float distance = x * x + y * y; //not using square root, use square of distance to compare instead
-	if (distance <= diameter * diameter) {
+	if (distance <= (diameter/2) * (diameter/2)) {
 		return 1;
 	}
 	return 0;
 
 }
+

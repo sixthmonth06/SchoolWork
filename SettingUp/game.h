@@ -7,3 +7,5 @@ void Game_Update(void);
 void Game_Exit(void);
 
 void draw_player(void);
+
+void check_for_input(void);
