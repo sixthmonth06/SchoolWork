@@ -9,7 +9,7 @@ CP_Color colors[NUM_PLAYER + 1];
 
 float diameter, width, height;
 
-int selected_player;
+int selected_player, selected;
 int velocity;
 
 CP_Vector player[NUM_PLAYER];
@@ -31,6 +31,8 @@ void Game_Init(void)
 	colors[3] = whiteColor;
 	
 	diameter = 50;
+	selected = 0;
+	velocity = 200;
 
 	for (int i = 0; i < NUM_PLAYER; i++) {
 		player[i].x = width * (i + 1) / (NUM_PLAYER + 1);
@@ -47,6 +49,7 @@ void Game_Update(void)
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_LEFT)) {
 		check_for_input();
 	}
+	movement();
 	
 }
 
@@ -63,12 +66,27 @@ void draw_player(void) {
 }
 
 void check_for_input(void) {
-	for (int i = 0; i < NUM_PLAYER; i++) {
+	for (int i = NUM_PLAYER - 1; i >= 0; i--) {
 		int clicked = IsCircleClicked(player[i].x,
 			player[i].y, diameter, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		if (clicked == 1) {
 			selected_player = i;
+			selected = 1;
 			break;
+		}
+	}
+}
+
+void movement(void) {
+	if (selected) {
+		int input_x = CP_Input_KeyDown(KEY_D) - CP_Input_KeyDown(KEY_A);
+		int input_y = CP_Input_KeyDown(KEY_S) - CP_Input_KeyDown(KEY_W);
+
+		if (input_x != 0) {
+			player[selected_player].x += input_x * velocity * CP_System_GetDt();
+		}
+		else if (input_y != 0) {
+			player[selected_player].y += input_y * velocity * CP_System_GetDt();
 		}
 	}
 }

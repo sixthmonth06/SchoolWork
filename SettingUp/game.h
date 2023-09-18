@@ -9,3 +9,5 @@ void Game_Exit(void);
 void draw_player(void);
 
 void check_for_input(void);
+
+void movement(void);
