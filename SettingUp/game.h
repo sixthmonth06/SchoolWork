@@ -11,3 +11,6 @@ void draw_player(void);
 void check_for_input(void);
 
 void movement(void);
+
+void return_to_menu(void);
+

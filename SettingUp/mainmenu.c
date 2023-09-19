@@ -6,6 +6,7 @@
 
 CP_Color redColor;
 CP_Color fontColor;
+
 float width;
 float height;
 
@@ -13,10 +14,12 @@ void Main_Menu_Init(void)
 {
 	width = CP_System_GetDisplayWidth() * 0.9;
 	height = CP_System_GetDisplayHeight() * 0.85;
-	CP_System_SetWindowSize(width, height);
-	Setting_Font();
+
 	redColor = CP_Color_Create(180, 0, 0, 255);
 	fontColor = CP_Color_Create(0, 0, 0, 255);
+
+	CP_System_SetWindowSize(width, height);
+	Setting_Font();
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 }
 
@@ -25,6 +28,10 @@ void Main_Menu_Update(void)
 	CP_Graphics_ClearBackground(CP_Color_Create(100, 100, 100, 255));
 	Play_Button();
 	Exit_Button();
+
+	if (CP_Input_KeyTriggered(KEY_Q)) {
+		CP_Engine_Terminate();
+	}
 
 }
 
@@ -56,7 +63,6 @@ void Play_Button(void) {
 			if (clicked == 1) {
 				CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
 		}
-
 	}
 }
 
