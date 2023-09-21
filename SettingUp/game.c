@@ -16,7 +16,7 @@ float rotation[NUM_PLAYER];
 int selected_player, selected;
 int velocity;
 
-CP_Vector player[NUM_PLAYER];
+players player[NUM_PLAYER];
 
 
 void Game_Init(void)
@@ -26,7 +26,9 @@ void Game_Init(void)
 	diameter = 50;
 
 	for (int i = 0; i < NUM_PLAYER; i++) {
-		rotation[i] = 0;
+		player[i].rotation = 0;
+		player[i].diameter = diameter;
+		player[i].position = CP_Vector_Set(width * (i + 1) / (NUM_PLAYER + 1), height / 2);
 	}
 
 	triangle_width = 20;
@@ -37,9 +39,6 @@ void Game_Init(void)
 	selected = 0;
 	velocity = 200;
 
-	for (int i = 0; i < NUM_PLAYER; i++) {
-		player[i].x = width * (i + 1) / (NUM_PLAYER + 1);
-		player[i].y = height / 2;
 	}
 }
 
@@ -70,13 +69,13 @@ void Game_Exit(void)
 void draw_player(void) {
 	for (int i = 0; i < NUM_PLAYER; i++) {
 		//draw circle
-		CP_Settings_Fill(colors[i]);
-		CP_Graphics_DrawCircle(player[i].x, player[i].y, diameter);
+		CP_Settings_Fill(player[i].color);
+		CP_Graphics_DrawCircle(player[i].position.x, player[i].position.y, player[i].diameter);
 		//draw triangle
-		CP_Settings_Fill(colors[NUM_PLAYER]);
-		CP_Graphics_DrawTriangleAdvanced(player[i].x, player[i].y - triangle_height,
-			player[i].x - triangle_width, player[i].y + triangle_height / 2,
-			player[i].x + triangle_width, player[i].y + triangle_height / 2, rotation[i]
+		CP_Settings_Fill(whiteColor);
+		CP_Graphics_DrawTriangleAdvanced(player[i].position.x, player[i].position.y - triangle_height,
+			player[i].position.x - triangle_width, player[i].position.y + triangle_height / 2,
+			player[i].position.x + triangle_width, player[i].position.y + triangle_height / 2, rotation[i]
 		);
 	}
 }

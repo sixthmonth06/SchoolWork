@@ -16,3 +16,12 @@ void return_to_menu(void);
 
 void set_color(void);
 
+typedef struct players {
+	CP_Vector position;
+	CP_Vector direction;
+	CP_Color color;
+	float rotation;
+	float diameter;
+
+} players;
+
