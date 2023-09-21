@@ -24,6 +24,17 @@ int IsCircleClicked(float circle_center_x, float circle_center_y, float diameter
 		return 1;
 	}
 	return 0;
+}
 
+int AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2)
+{
+	CP_Vector positionOne = CP_Vector_Set(c1_x, c1_y);
+	CP_Vector positionTwo = CP_Vector_Set(c2_x, c2_y);
+	float distance = CP_Vector_Distance(positionOne, positionTwo);
+
+	if (distance < r1 + r2) {
+		return 1;
+	}
+	return 0;
 }
 

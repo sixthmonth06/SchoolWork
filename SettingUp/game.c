@@ -32,10 +32,7 @@ void Game_Init(void)
 	triangle_width = 20;
 	triangle_height = 25;
 
-	colors[0] = redColor = CP_Color_Create(255, 0, 0, 255);
-	colors[1] = greenColor = CP_Color_Create(0, 255, 0, 255);
-	colors[2] = blueColor = CP_Color_Create(0, 0, 255, 255);
-	colors[3] = whiteColor = CP_Color_Create(255, 255, 255, 255);
+	set_color();
 	
 	selected = 0;
 	velocity = 200;
@@ -128,3 +125,9 @@ void return_to_menu(void) {
 	CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 }
 
+void set_color(void) {
+	colors[0] = redColor = CP_Color_Create(255, 0, 0, 255);
+	colors[1] = greenColor = CP_Color_Create(0, 255, 0, 255);
+	colors[2] = blueColor = CP_Color_Create(0, 0, 255, 255);
+	colors[3] = whiteColor = CP_Color_Create(255, 255, 255, 255);
+}

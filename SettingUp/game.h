@@ -14,3 +14,5 @@ void movement(void);
 
 void return_to_menu(void);
 
+void set_color(void);
+
