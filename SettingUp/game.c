@@ -11,12 +11,14 @@ CP_Color colors[NUM_PLAYER];
 float diameter, width, height;
 float triangle_width, triangle_height;
 
-float rotation[NUM_PLAYER];
+float rotation[4];
 
-int selected_player, selected;
+int selected_player;
+int selected;
 int velocity;
 
 players player[NUM_PLAYER];
+CP_Vector direction[4];
 
 
 void Game_Init(void)
@@ -26,17 +28,20 @@ void Game_Init(void)
 	diameter = 50;
 
 	set_color();
+	set_direction();
+	set_rotation();
 
 	for (int i = 0; i < NUM_PLAYER; i++) {
 		player[i].rotation = 0;
 		player[i].diameter = diameter;
 		player[i].position = CP_Vector_Set(width * (i + 1) / (NUM_PLAYER + 1), height / 2);
 		player[i].color = colors[i];
+		player[i].direction = direction[0];
+		player[i].selected = 0;
 	}
 
 	triangle_width = 20;
 	triangle_height = 25;
-
 	selected = 0;
 	velocity = 200;
 }
@@ -45,7 +50,6 @@ void Game_Init(void)
 void Game_Update(void)
 {
 	movement();
-	CP_Graphics_ClearBackground(CP_Color_Create(100, 100, 100, 255));
 	draw_player();
 	check_for_input();
 }
@@ -56,6 +60,9 @@ void Game_Exit(void)
 }
 
 void draw_player(void) {
+	//clear background
+	CP_Graphics_ClearBackground(CP_Color_Create(100, 100, 100, 255));
+
 	for (int i = 0; i < NUM_PLAYER; i++) {
 		//draw circle
 		CP_Settings_Fill(player[i].color);
@@ -82,6 +89,13 @@ void check_for_input(void) {
 			if (clicked == 1) {
 				selected_player = i;
 				selected = 1;
+				for (int j = 0; j < NUM_PLAYER; j++) {
+					if (j != i) {
+						player[j].selected = 0;
+						continue;
+					}
+					player[j].selected = 1;
+				}
 				break;
 			}
 		}
@@ -89,6 +103,21 @@ void check_for_input(void) {
 }
 
 void movement(void) {
+
+	float delta = CP_System_GetDt();
+	float movement_scale = velocity * delta;
+
+	for (int i = 0; i < NUM_PLAYER; i++) {
+		if (!player[i].selected) {
+			CP_Vector movement_speed = CP_Vector_Scale(player[i].direction, movement_scale);
+			int wall_collided = wall_collision(player[i].position, movement_speed);
+			//can use if (collided) and change the direction instead (TO DO)
+			if (!wall_collided) {
+				player[i].position = CP_Vector_Add(player[i].position, movement_speed);
+				player[i].rotation = calculate_rotation(player[i].direction);
+			}
+		}
+	}
 	if (selected) {
 		int input_x = CP_Input_KeyDown(KEY_D) - CP_Input_KeyDown(KEY_A);
 		int input_y = CP_Input_KeyDown(KEY_S) - CP_Input_KeyDown(KEY_W);
@@ -112,6 +141,7 @@ void movement(void) {
 			}
 		}
 	}
+
 }
 
 void return_to_menu(void) {
@@ -124,4 +154,39 @@ void set_color(void) {
 	colors[1] = greenColor = CP_Color_Create(0, 255, 0, 255);
 	colors[2] = blueColor = CP_Color_Create(0, 0, 255, 255);
 	whiteColor = CP_Color_Create(255, 255, 255, 255);
+}
+
+void set_direction(void) {
+	direction[0] = CP_Vector_Set(0, -1);
+	direction[1] = CP_Vector_Set(0, 1);
+	direction[2] = CP_Vector_Set(1, 0);
+	direction[3] = CP_Vector_Set(-1, 0);
+}
+
+void set_rotation(void) {
+	rotation[0] = 0;
+	rotation[1] = 180;
+	rotation[2] = 90;
+	rotation[3] = 270;
+}
+
+float calculate_rotation(CP_Vector dir) {
+	
+	for (int i = 0; i < 4; i++) {
+		if (dir.x == direction[i].x && dir.y == direction[i].y) {
+			return rotation[i];
+		}
+	}
+}
+
+int wall_collision(CP_Vector position, CP_Vector movement_speed) {
+
+	position = CP_Vector_Add(position, movement_speed);
+	if (position.x < 0 || position.x > width) {
+		return 1;
+	}
+	if (position.y < 0 || position.y > height) {
+		return 1;
+	}
+	return 0;
 }
