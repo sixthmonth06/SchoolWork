@@ -38,3 +38,19 @@ int AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c
 	return 0;
 }
 
+int wall_collision(CP_Vector position, CP_Vector direction, 
+	CP_Vector movement_speed, float diameter, int width, int height) {
+
+	CP_Vector dir = CP_Vector_Scale(direction, diameter/2);
+	CP_Vector change_in_position = CP_Vector_Add(dir, movement_speed);
+	CP_Vector new_position = CP_Vector_Add(position, change_in_position);
+	if (new_position.x <= 3 || new_position.x >= width - 3) {
+		return 1;
+	}
+	if (new_position.y <= 3 || new_position.y >= height - 3) {
+		return 1;
+	}
+	return 0;
+}
+
+
