@@ -34,6 +34,7 @@ typedef struct players {
 	float diameter;
 	float selected;
 	CP_BOOL can_move[4];
+	CP_BOOL moving;
 
 } players;
 

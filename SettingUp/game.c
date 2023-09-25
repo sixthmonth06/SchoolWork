@@ -62,11 +62,15 @@ void draw_player(void) {
 		CP_Settings_Fill(player[i].color);
 		CP_Graphics_DrawCircle(player[i].position.x, player[i].position.y, player[i].diameter);
 		//draw triangle
-		CP_Settings_Fill(whiteColor);
-		CP_Graphics_DrawTriangleAdvanced(player[i].position.x, player[i].position.y - triangle_height,
-			player[i].position.x - triangle_width, player[i].position.y + triangle_height / 2,
-			player[i].position.x + triangle_width, player[i].position.y + triangle_height / 2, player[i].rotation
-		);
+		if (player[i].moving == TRUE) {
+
+			CP_Settings_Fill(whiteColor);
+			CP_Graphics_DrawTriangleAdvanced(player[i].position.x, player[i].position.y - triangle_height,
+				player[i].position.x - triangle_width, player[i].position.y + triangle_height / 2,
+				player[i].position.x + triangle_width, player[i].position.y + triangle_height / 2, 
+				player[i].rotation);
+		}
+
 	}
 }
 
@@ -106,6 +110,7 @@ void movement(void) {
 
 			CP_Vector dir = direction[player[i].direction_index];
 			CP_Vector movement = CP_Vector_Scale(dir, movement_speed);
+			player[i].moving = TRUE;
 
 			for (int j = 0; j < 4; j++) {
 
@@ -126,17 +131,19 @@ void movement(void) {
 				player[i].rotation = rotation[index];
 			}
 			else {
-				for (int k = 3; k >= 0; k--) {
-					if (player[i].can_move[k] == TRUE) {
-						player[i].direction_index = k;
-						dir = direction[k];
+				for (int k = 0; k < 4; k++) {
+					index = (index + 1) % 4 ;
+					if (player[i].can_move[index] == TRUE) {
+						player[i].direction_index = index;
+						dir = direction[index];
 						movement = CP_Vector_Scale(dir, movement_speed);
 						player[i].position = CP_Vector_Add(player[i].position, movement);
-						player[i].rotation = rotation[k];
+						player[i].rotation = rotation[index];
 						break;
 					}
 					
 				}
+				player[i].moving = FALSE;
 			}
 		}
 	}		
@@ -204,6 +211,7 @@ void init_player(void) {
 		player[i].color = colors[i];
 		player[i].direction_index = 0;
 		player[i].selected = 0;
+		player[i].moving = TRUE;
 		for (int j = 0; j < 4; j++) {
 			player[i].can_move[j] = TRUE;
 		}
