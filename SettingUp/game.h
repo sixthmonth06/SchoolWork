@@ -24,6 +24,10 @@ float calculate_rotation(CP_Vector dir);
 
 int wall_collision(CP_Vector position, CP_Vector movement_speed);
 
+void init_player(void);
+
+CP_Vector Vector_UP, Vector_RIGHT, Vector_DOWN, Vector_LEFT;
+
 typedef struct players {
 	CP_Vector position;
 	CP_Vector direction;
@@ -31,6 +35,7 @@ typedef struct players {
 	float rotation;
 	float diameter;
 	float selected;
+	CP_BOOL can_move[4];
 
 } players;
 

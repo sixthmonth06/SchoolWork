@@ -25,20 +25,12 @@ void Game_Init(void)
 {
 	width = CP_System_GetDisplayWidth() * 0.9f;
 	height = CP_System_GetDisplayHeight() * 0.85f;
-	diameter = 50;
 
 	set_color();
 	set_direction();
 	set_rotation();
+	init_player();
 
-	for (int i = 0; i < NUM_PLAYER; i++) {
-		player[i].rotation = 0;
-		player[i].diameter = diameter;
-		player[i].position = CP_Vector_Set(width * (i + 1) / (NUM_PLAYER + 1), height / 2);
-		player[i].color = colors[i];
-		player[i].direction = direction[0];
-		player[i].selected = 0;
-	}
 
 	triangle_width = 20;
 	triangle_height = 25;
@@ -49,9 +41,10 @@ void Game_Init(void)
 
 void Game_Update(void)
 {
+	check_for_input();
 	movement();
 	draw_player();
-	check_for_input();
+
 }
 
 void Game_Exit(void)
@@ -157,10 +150,10 @@ void set_color(void) {
 }
 
 void set_direction(void) {
-	direction[0] = CP_Vector_Set(0, -1);
-	direction[1] = CP_Vector_Set(0, 1);
-	direction[2] = CP_Vector_Set(1, 0);
-	direction[3] = CP_Vector_Set(-1, 0);
+	direction[0] = Vector_UP = CP_Vector_Set(0, -1);
+	direction[1] = Vector_RIGHT = CP_Vector_Set(1, 0);
+	direction[2] = Vector_DOWN = CP_Vector_Set(0, 1);
+	direction[3] = Vector_LEFT = CP_Vector_Set(-1, 0);
 }
 
 void set_rotation(void) {
@@ -189,4 +182,21 @@ int wall_collision(CP_Vector position, CP_Vector movement_speed) {
 		return 1;
 	}
 	return 0;
+}
+
+void init_player(void) {
+
+	diameter = 50;
+
+	for (int i = 0; i < NUM_PLAYER; i++) {
+		player[i].rotation = 0;
+		player[i].diameter = diameter;
+		player[i].position = CP_Vector_Set(width * (i + 1) / (NUM_PLAYER + 1), height / 2);
+		player[i].color = colors[i];
+		player[i].direction = direction[0];
+		player[i].selected = 0;
+		for (int j = 0; j < 4; j++) {
+			player[i].can_move[j] = TRUE;
+		}
+	}
 }
