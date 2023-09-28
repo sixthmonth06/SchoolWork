@@ -22,9 +22,8 @@ void set_rotation(void);
 
 void init_player(void);
 
-int choose_new_direction_index(void);
-
 CP_Vector Vector_UP, Vector_RIGHT, Vector_DOWN, Vector_LEFT;
+
 
 typedef struct players {
 	CP_Vector position;

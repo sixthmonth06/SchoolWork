@@ -52,5 +52,3 @@ int wall_collision(CP_Vector position, CP_Vector direction,
 	}
 	return 0;
 }
-
-
