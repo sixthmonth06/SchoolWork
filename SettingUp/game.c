@@ -78,13 +78,12 @@ void check_for_input(void) {
 				player[i].position.y, player[i].diameter, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 			if (clicked == 1) {
 				selected_player = i;
-				selected = 1;
+				player[i].selected = 1;
 				for (int j = 0; j < NUM_PLAYER; j++) {
 					if (j != i) {
 						player[j].selected = 0;
 						continue;
 					}
-					player[j].selected = 1;
 				}
 				break;
 			}
@@ -116,7 +115,7 @@ void movement(void) {
 				}
 			}
 
-			for (int k = 0; k < DIR_NUM; k++) {
+			for (int k = 0; k < NUM_PLAYER; k++) {
 				if (i != k) {
 					int object_collision = AreCirclesIntersecting(player[i].position.x, player[i].position.y,
 						player[i].diameter, player[k].position.x, player[k].position.y, player[k].diameter);
@@ -144,8 +143,10 @@ void movement(void) {
 
 			}
 			else {
-				for (int k = 0; k < 4; k++) {
-					index = (index + 1) % 4 ;
+				int index = (int)CP_Random_GetInt();
+				for (int k = 0; k < DIR_NUM; k++) {
+					index += k;
+					index %= DIR_NUM;
 					if (player[i].can_move[index] == TRUE) {
 						player[i].direction_index = index;
 						dir = direction[index];
@@ -159,40 +160,40 @@ void movement(void) {
 			}
 		}
 	}		
+	for (int i = 0; i < NUM_PLAYER; i++) {
+		if (player[i].selected) {
+			int input_x = CP_Input_KeyDown(KEY_D) - CP_Input_KeyDown(KEY_A);
+			int input_y = CP_Input_KeyDown(KEY_S) - CP_Input_KeyDown(KEY_W);
 
-	if (selected) {
-		int input_x = CP_Input_KeyDown(KEY_D) - CP_Input_KeyDown(KEY_A);
-		int input_y = CP_Input_KeyDown(KEY_S) - CP_Input_KeyDown(KEY_W);
-
-		if (input_x != 0) {
-			player[selected_player].position.x += input_x * velocity * CP_System_GetDt();
-			if (input_x > 0) {
-				player[selected_player].rotation = 90;
-				player[selected_player].direction_index = 1;
+			if (input_x != 0) {
+				player[selected_player].position.x += input_x * velocity * CP_System_GetDt();
+				if (input_x > 0) {
+					player[selected_player].rotation = 90;
+					player[selected_player].direction_index = 1;
+				}
+				else {
+					player[selected_player].rotation = 270;
+					player[selected_player].direction_index = 3;
+				}
+			}
+			else if (input_y != 0) {
+				player[selected_player].position.y += input_y * velocity * CP_System_GetDt();
+				if (input_y > 0) {
+					player[selected_player].rotation = 180;
+					player[selected_player].direction_index = 2;
+				}
+				else {
+					player[selected_player].rotation = 0;
+					player[selected_player].direction_index = 0;
+				}
 			}
 			else {
-				player[selected_player].rotation = 270;
-				player[selected_player].direction_index = 3;
+				int index = player[selected_player].direction_index;
+				player[selected_player].position.x += direction[index].x * velocity * CP_System_GetDt();
+				player[selected_player].position.y += direction[index].y * velocity * CP_System_GetDt();
 			}
-		}
-		else if (input_y != 0) {
-			player[selected_player].position.y += input_y * velocity * CP_System_GetDt();
-			if (input_y > 0) {
-				player[selected_player].rotation = 180;
-				player[selected_player].direction_index = 2;
-			}
-			else {
-				player[selected_player].rotation = 0;
-				player[selected_player].direction_index = 0;
-			}
-		}
-		else {
-			int index = player[selected_player].direction_index;
-			player[selected_player].position.x += direction[index].x * velocity * CP_System_GetDt();
-			player[selected_player].position.y += direction[index].y * velocity * CP_System_GetDt();
 		}
 	}
-
 }
 
 void return_to_menu(void) {
@@ -233,7 +234,7 @@ void init_player(void) {
 		player[i].rotation = 0;
 		player[i].diameter = diameter;
 		player[i].position = CP_Vector_Set(width * (i + 1) / (NUM_PLAYER + 1), height / 2);
-		player[i].color = colors[i];
+		player[i].color = colors[i % 3];
 		player[i].direction_index = 0;
 		player[i].selected = 0;
 		player[i].moving = TRUE;
@@ -241,4 +242,7 @@ void init_player(void) {
 			player[i].can_move[j] = TRUE;
 		}
 	}
+
+	player[1].selected = 1;
+	selected_player = 1;
 }
